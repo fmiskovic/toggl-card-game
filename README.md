@@ -1,6 +1,8 @@
 # Project toggl-card-game
 
-This is assessment project given by Toggl.com hiring team. 
+This is assessment project given by Toggl.com hiring team.
+
+## NOTE: 
 Deck date is stored in memory and not persisted into a DB or FS.
 
 ## Getting Started
@@ -17,7 +19,7 @@ make run
 
 test create new default deck endpoint
 ```bash
-curl -X POST http://localhost:8080/api/deck -d '{}'
+curl -X POST http://localhost:8080/api/deck'
 ```
 
 test create new full shuffled deck endpoint 
