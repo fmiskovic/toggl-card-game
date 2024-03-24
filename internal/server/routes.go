@@ -2,30 +2,15 @@ package server
 
 import (
 	"net/http"
-
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
+	"toggl-card-game/internal/handlers"
 )
 
 func (s *Server) RegisterRoutes() http.Handler {
-	e := echo.New()
-	e.Use(middleware.Logger())
-	e.Use(middleware.Recover())
+	mux := http.NewServeMux()
 
-	e.GET("/", s.HelloWorldHandler)
-	e.GET("/health", s.healthHandler)
+	mux.HandleFunc("POST /api/deck", handlers.MakeHandler(handlers.Handle(handlers.ParseCreateRequest, s.DeckService.CreateDeck)))
+	mux.HandleFunc("GET /api/deck/{UUID}", handlers.MakeHandler(handlers.Handle(handlers.ParseOpenRequest, s.DeckService.OpenDeck)))
+	mux.HandleFunc("PUT /api/deck", handlers.MakeHandler(handlers.Handle(handlers.ParseDrawRequest, s.DeckService.DrawCards)))
 
-	return e
-}
-
-func (s *Server) HelloWorldHandler(c echo.Context) error {
-	resp := map[string]string{
-		"message": "Hello World",
-	}
-
-	return c.JSON(http.StatusOK, resp)
-}
-
-func (s *Server) healthHandler(c echo.Context) error {
-	return c.JSON(http.StatusOK, s.db.Health())
+	return mux
 }
